@@ -1,8 +1,14 @@
+
+# Conditional build:
+# _with_php - without PHP library
+
+%define php_version 4.1.0
+
 Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
-Version:	2.20b
-Release:	1
+Version:	2.20c
+Release:	2
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(es):	Red
@@ -13,18 +19,35 @@ Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
-Source4:	http://www.php.net/distributions/php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
-Patch1:		php-DESTDIR.patch
+%if %{?_with_php:1}%{!?_with_php:0}
+Source4:	http://www.php.net/distributions/php-%{php_version}.tar.gz
+Patch1:		php-mysql-socket.patch
+Patch2:		php-mail.patch
+Patch3:		php-link-libs.patch
+Patch4:		php-session-path.patch
+Patch5:		php-am_ac_lt.patch
+Patch6:		php-shared.patch
+Patch7:		php-pldlogo.patch
+Patch8:		php-ac250.patch
+Patch9:		php-dbplus.patch
+BuildRequires: gd-devel
+BuildRequires: db3-devel
+BuildRequires:  autoconf >= 1.4
+BuildRequires:  automake >= 1.4d
+BuildRequires:  libtool >= 1.4
+BuildRequires: bzip2-devel
+BuildRequires: mysql-devel
+%endif
+Provides:       httpd
+Provides:       webserver
+Prereq:         /sbin/chkconfig
+Prereq:         /usr/sbin/useradd
+Prereq:         /usr/bin/getgid
+Prereq:         /bin/id
+Prereq:         sh-utils
+Prereq:         rc-scripts
 URL:		http://www.acme.com/software/thttpd/
-Provides:	httpd
-Provides:	webserver
-Prereq:		/sbin/chkconfig
-Prereq:		/usr/sbin/useradd
-Prereq:		/usr/bin/getgid
-Prereq:		/bin/id
-Prereq:		sh-utils
-Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -43,32 +66,65 @@ wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów cgi,
 autentyfikacji oraz ssi jest do³±czone.
 
 %prep
-%setup -q -a4
+%setup -q %{?_with_php:-a4}
 %patch0 -p1
-cd php-4.0.4pl1
+
+%if %{?_with_php:1}%{!?_with_php:0}
+cd php-%{php_version}
 %patch1 -p1
+%patch2 -p1
+%patch3 -p1
+%patch4 -p1
+%patch5 -p1
+%patch6 -p1
+%patch7 -p1
+%patch8 -p1
+%patch9 -p1
 cp -f %{SOURCE3} ../config.h
+%endif
+
+%build
+CFLAGS="%{rpmcflags}"; export CFLAGS
+%if %{?_with_php:1}%{!?_with_php:0}
+./buildconf
+libtoolize --copy --force
+aclocal
+autoconf
 
 %configure \
 	--with-thttpd=.. \
+	--disable-debug \
 	--enable-bcmath \
-	--with-bz2 \
 	--enable-calendar \
 	--enable-ctype \
-	--with-db3 \
 	--enable-ftp \
+   --enable-magic-quotes \
+   --enable-shared \
+   --enable-track-vars \
+   --enable-safe-mode \
+   --enable-trans-sid \
+   --enable-sysvsem \
+   --enable-sysvshm \
+   --enable-shmop \
+   --enable-session \
+   --enable-exif \
+	--with-db3 \
+   --with-regex=php \
+   --with-gettext \
+	--without-mysql \
+   --with-zlib \
 	--with-gd
+	--with-bz2 \
+	--with-mysql=/usr \
+	--with-mysql-sock=/var/lib/mysql/mysql.sock
 	
-cd ..
-
-%build
-cd php-*
 %{__make}
 # this install adds special options to thttpd Makefile.in
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
 cd ..
+%endif
 # unfortunately this configure _must_ be here
-%configure
+%configure2_13
 %{__make} \
 	WEBDIR=/home/httpd/html \
 	BINDIR=%{_sbindir} \
@@ -96,10 +152,14 @@ install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT/%{_mandir}/man1/
 install extras/syslogtocern.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
 install thttpd.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
 
-cd php-4.0.4pl1
+%if %{?_with_php:1}%{!?_with_php:0}
+cd php-%{php_version}
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
+gzip -9nf LICENSE NEWS
+cd ..
+%endif
 
-gzip -9nf ../README ../TODO LICENSE NEWS
+gzip -9nf README TODO 
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -115,7 +175,7 @@ else
 fi
 if [ -n "`id -u http 2>/dev/null`" ]; then
         if [ "`id -u http`" != "51" ]; then
-                echo "Warning: user http haven't uid=51. Correct this before install apache" 1>&2
+                echo "Warning: user http haven't uid=51. Correct this before install %{name}" 1>&2
                 exit 1
         fi
 else
@@ -124,8 +184,18 @@ fi
 
 %post
 /sbin/chkconfig --add %{name}
+if [ -f /var/lock/subsys/thttpd ]; then
+	/etc/rc.d/init.d/thttpd restart 1>&2
+else
+	echo "Run \"/etc/rc.d/init.d/thttpd start\" to start %{name} daemon."
+fi
 
 %preun
+if [ "$1" = "0" ]; then
+	if [ -f /var/lock/subsys/thttpd ]; then
+		/etc/rc.d/init.d/thttpd stop 1>&2
+	fi
+fi
 if [ "$1" = "0" ]; then
 	/sbin/chkconfig --del %{name}
 fi
@@ -138,7 +208,10 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz */*.gz
+%doc *.gz 
+%if %{?_with_php:1}%{!?_with_php:0}
+%doc php-%{php_version}/*.gz
+%endif
 %attr(2755, http, http) %{_sbindir}/makeweb
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
