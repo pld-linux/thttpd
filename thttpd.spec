@@ -98,7 +98,7 @@ EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 ./buildconf
 libtoolize --copy --force
 aclocal
-autoconf
+%{__autoconf}
 
 %configure \
 	--with-thttpd=.. \
