@@ -1,23 +1,23 @@
 #
 # Conditional build:
-# _with_php - with PHP library
+%bcond_with php		# with PHP library
 #
 %define		php_version	4.0.6
 
 Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
-Version:	2.24
+Version:	2.25
 Release:	1
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
-# Source0-md5:	9e72c27986548d0cbc8ea850b7b47bdd
+# Source0-md5:	c31660f11a30df81ab031d3243cb70f6
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
 Patch0:		%{name}-includes.patch
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 Source4:	http://www.php.net/distributions/php-%{php_version}.tar.gz
 Patch1:		%{name}-php.patch
 Patch2:		php-mysql-socket.patch
@@ -32,7 +32,7 @@ Patch10:	php-pearinstall.patch
 Patch11:	%{name}-remove-php-patch.patch
 %endif
 URL:		http://www.acme.com/software/thttpd/
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 BuildRequires:	autoconf >= 1.4
 BuildRequires:	automake >= 1.4d
 BuildRequires:	bzip2-devel
@@ -74,7 +74,7 @@ uwierzytelniania, oraz SSI.
 %setup -q
 %patch0 -p1
 
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 %patch1 -p1
 tar xzf %{SOURCE4}
 cd php-%{php_version}
@@ -95,7 +95,7 @@ cp -f %{SOURCE3} ../config.h
 %build
 install %{_datadir}/automake/config.* .
 CFLAGS="%{rpmcflags}"; export CFLAGS
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 cd php-%{php_version}
 EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 ./buildconf
@@ -165,7 +165,7 @@ install extras/makeweb.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install extras/syslogtocern.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install thttpd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 cd php-%{php_version}
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
@@ -218,7 +218,7 @@ fi
 %files
 %defattr(644,root,root,755)
 %doc README TODO
-%if %{?_with_php:1}%{!?_with_php:0}
+%if %{with php}
 %doc php-%{php_version}/{LICENSE,NEWS}
 %endif
 %attr(2755,http,http) %{_sbindir}/makeweb
