@@ -59,16 +59,15 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 Thttpd is a very compact no-frills httpd serving daemon that can
 handle very high loads. While lacking many of the advanced features of
 Apache, thttpd operates without forking and is extremely efficient in
-memory use. Basic support for cgi scripts, authentication, and ssi is
-provided for. Advanced features include the ability to throttle
-traffic.
+memory use. Basic support for CGI scripts, authentication and SSI is
+provided. Advanced features include the ability to throttle traffic.
 
 %description -l pl
-Thttpd jest kompaktowym serwerem http zdolnym obs³ugiwaæ bardzo
+Thttpd jest kompaktowym serwerem HTTP, zdolnym obs³ugiwaæ bardzo
 wysokie obci±¿enia. Mimo i¿ brakuje mu wielu zaawansowanych mo¿liwo¶ci
-z Apache to jednak jest niezwykle wydajny je¶li chodzi o
-wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów cgi,
-autentyfikacji oraz ssi jest do³±czone.
+Apache, jest niezwykle wydajny je¶li chodzi o wykorzystywanie pamiêci.
+Dostarczane jest podstawowe wsparcie dla skryptów CGI,
+uwierzytelniania, oraz SSI.
 
 %prep
 %setup -q
@@ -126,7 +125,7 @@ EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 	--with-zlib \
 	--with-gd \
 	--with-bz2 \
-	--with-mysql=/usr \
+	--with-mysql=%{_prefix} \
 	--with-mysql-sock=/var/lib/mysql/mysql.sock
 #	--with-pear=%{peardir} \
 
