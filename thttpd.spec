@@ -57,11 +57,11 @@ gzip -9nf README TODO
 
 %pre
 
-grep '^httpd:' /etc/passwd >/dev/null || \
-	/usr/sbin/useradd -r httpd
+grep '^http:' /etc/passwd >/dev/null || \
+	/usr/sbin/useradd -r http
 
-grep '^httpd:' /etc/group >/dev/null || \
-	/usr/sbin/groupadd -r httpd
+grep '^http:' /etc/group >/dev/null || \
+	/usr/sbin/groupadd -r http
 
 %post
 /sbin/chkconfig --add thttpd
