@@ -8,7 +8,7 @@ Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.20c
-Release:	5
+Release:	6
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -160,7 +160,7 @@ install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/httpd/cgi-bin
 install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT%{_mandir}/man8
 # htpasswd.1 confilcts with apache, so temporary commented
 #install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT%{_mandir}/man1
-install extras/htpasswd.1 $RPM_BUILD_ROOT%{_mandir}/man1
+install extras/makeweb.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install extras/syslogtocern.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install thttpd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
