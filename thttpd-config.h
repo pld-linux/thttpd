@@ -8,7 +8,6 @@
 #define LOG_FACILITY LOG_DAEMON
 #define TILDE_MAP_2 "public_html"
 #define AUTH_FILE ".htpasswd"
-#define DEFAULT_CHARSET "iso-8859-2"
 #define ALWAYS_VHOST
 #define DEFAULT_USER "http"
 #define EXPLICIT_ERROR_PAGES
