@@ -12,6 +12,7 @@ Release:	4
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
+# Source0-md5:	0ba609a3b8564289f29ac75bced9181f
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
