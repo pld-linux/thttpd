@@ -1,7 +1,7 @@
-
+#
 # Conditional build:
 # _with_php - with PHP library
-
+#
 %define		php_version	4.0.6
 
 Summary:	Throttleable lightweight httpd server
@@ -132,7 +132,8 @@ EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 
 %{__make}
 # this install adds special options to thttpd Makefile.in
-%{__make} DESTDIR=$RPM_BUILD_ROOT install
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 cd ..
 %endif
 # unfortunately this configure _must_ be here
@@ -151,19 +152,20 @@ install -d $RPM_BUILD_ROOT{/home/httpd/cgi-bin,/etc/rc.d/init.d} \
 	$RPM_BUILD_ROOT{%{_mandir}/man{1,8},%{_sbindir}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/thttpd
-install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
-install thttpd $RPM_BUILD_ROOT/%{_sbindir}
-install extras/{htpasswd,makeweb,syslogtocern} $RPM_BUILD_ROOT/%{_sbindir}
-install cgi-bin/printenv $RPM_BUILD_ROOT/home/httpd/cgi-bin/
-install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/httpd/cgi-bin/
-install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT/%{_mandir}/man8/
-install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT/%{_mandir}/man1/
-install extras/syslogtocern.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
-install thttpd.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
+install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
+install thttpd $RPM_BUILD_ROOT%{_sbindir}
+install extras/{htpasswd,makeweb,syslogtocern} $RPM_BUILD_ROOT%{_sbindir}
+install cgi-bin/printenv $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT%{_mandir}/man8
+install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT%{_mandir}/man1
+install extras/syslogtocern.8 $RPM_BUILD_ROOT%{_mandir}/man8
+install thttpd.8 $RPM_BUILD_ROOT%{_mandir}/man8
 
 %if %{?_with_php:1}%{!?_with_php:0}
 cd php-%{php_version}
-%{__make} DESTDIR=$RPM_BUILD_ROOT install
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
 cd ..
 %endif
 
