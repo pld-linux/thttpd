@@ -2,7 +2,7 @@
 #
 # thttpd	Tiny/turbo/throttling http daemon
 #
-# chkconfig: 345 85 15
+# chkconfig:	345 85 15
 # description:	Jef Poskanzer's tiny/turbo/throttling http daemon
 # processname:	thttpd
 # pidfile:	/var/run/thttpd.pid
@@ -28,10 +28,11 @@ else
 	exit 0
 fi
 
+
 # See how we were called.
 case "$1" in
   start)
-  	# Check if the service is already running?
+	# Check if the service is already running?
 	if [ ! -f /var/lock/subsys/thttpd ]; then
 		msg_starting thttpd
 		daemon /usr/sbin/thttpd -C /etc/thttpd.conf
@@ -43,10 +44,11 @@ case "$1" in
 	fi
 	;;
   stop)
-  	# Stop daemons.
 	if [ -f /var/lock/subsys/thttpd ]; then
+		# Stop daemons.
 		msg_stopping thttpd
 		killproc thttpd
+		RETVAL=$?
 		rm -f /var/lock/subsys/thttpd /var/run/thttpd.pid /var/run/thttpd.loc* >/dev/null 2>&1
 	else
 		msg_not_running thttpd
@@ -54,16 +56,22 @@ case "$1" in
 	fi
 	;;
   status)
-  	status thttpd
+	status thttpd
 	exit $?
 	;;
   restart|reload)
-  	$0 stop
+	$0 stop
 	$0 start
+	exit $?
 	;;
-   *)
-	msg_usage "$0 {start|stop|restart|reload|status}"
+  force-reload)
+	$0 stop && $0 start
+	exit $?
+	;;
+  *)
+	msg_usage "$0 {start|stop|restart|reload|force-reload|status}"
 	exit 1
 	;;
 esac
 
+exit $RETVAL
