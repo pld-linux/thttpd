@@ -13,7 +13,7 @@ Source3:	%{name}-config.h
 Source4:	php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
 Patch1:		php-DESTDIR.patch
-Copyright:	BSD
+License:	BSD
 Provides:       httpd
 Provides:       webserver
 Prereq:         /sbin/chkconfig
