@@ -54,7 +54,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define         extensionsdir	%{_libdir}/php
+%define		extensionsdir	%{_libdir}/php
 
 %description
 Thttpd is a very compact no-frills httpd serving daemon that can
@@ -105,7 +105,7 @@ EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 
 %configure \
 	--with-thttpd=.. \
-	--disable-debug \
+	--%{!?debug:dis}%{?debug:en}able-debug \
 	--enable-bcmath \
 	--enable-calendar \
 	--enable-ctype \
@@ -123,7 +123,6 @@ EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 	--with-db3 \
 	--with-regex=php \
 	--with-gettext \
-	--without-mysql \
 	--with-zlib \
 	--with-gd \
 	--with-bz2 \
@@ -211,8 +210,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-        /usr/sbin/userdel http
-        /usr/sbin/groupdel http
+	/usr/sbin/userdel http
+	/usr/sbin/groupdel http
 fi
 
 %files
