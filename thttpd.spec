@@ -99,18 +99,36 @@ cd php-4.0.4pl1
 gzip -9nf ../README ../TODO LICENSE NEWS
 
 %pre
-GROUP=http; GID=51; %groupadd
-USER=http; UID=51; HOME=/home/httpd; COMMENT="HTTP User"; %useradd
+if [ -n "`getgid http`" ]; then
+        if [ "`getgid http`" != "51" ]; then
+                echo "Warning: group http haven't gid=51. Correct this before install %{name}" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 51 -r -f http
+fi
+if [ -n "`id -u http 2>/dev/null`" ]; then
+        if [ "`id -u http`" != "51" ]; then
+                echo "Warning: user http haven't uid=51. Correct this before install apache" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+fi
 
 %post
-%chkconfig_add
+/sbin/chkconfig --add %{name}
 
 %preun
-%chkconfig_del
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del %{name}
+fi
 
 %postun
-GROUP=http; %groupdel
-USER=http; %userdel
+if [ "$1" = "0" ]; then
+        /usr/sbin/userdel http
+        /usr/sbin/groupdel http
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
