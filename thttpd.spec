@@ -10,7 +10,7 @@ Summary:	Throttleable lightweight HTTP server
 Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	3
+Release:	4
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -55,6 +55,7 @@ Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
+Requires:	htpasswd
 Provides:	group(thttp)
 Provides:	user(thttp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -74,6 +75,19 @@ wysokie obci±¿enia. Mimo i¿ brakuje mu wielu zaawansowanych mo¿liwo¶ci
 Apache, jest niezwykle wydajny je¶li chodzi o wykorzystywanie pamiêci.
 Dostarczane jest podstawowe wsparcie dla skryptów CGI,
 uwierzytelniania, oraz SSI.
+
+%package -n htpasswd-%{name}
+Summary:        thttpd htpasswd utility
+Group:          Networking/Utilities
+Provides:       htpasswd
+Obsoletes:      htpasswd-apache1
+Obsoletes:      htpasswd-apache2
+
+%description -n htpasswd-%{name}
+htpasswd from thttpd
+
+Usage: htpasswd [-c] passwordfile username
+The -c flag creates a new file.
 
 %prep
 %setup -q
@@ -154,21 +168,24 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/home/services/%{name}/{cgi-bin,html},%{_sbindir}} \
+install -d $RPM_BUILD_ROOT{/home/services/%{name}/{cgi-bin,html},%{_sbindir},%{_bindir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sysconfdir},%{_mandir}/man{1,8}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
 install thttpd $RPM_BUILD_ROOT%{_sbindir}
-install extras/{htpasswd,makeweb,syslogtocern} $RPM_BUILD_ROOT%{_sbindir}
+install extras/{makeweb,syslogtocern} $RPM_BUILD_ROOT%{_sbindir}
 install cgi-bin/printenv $RPM_BUILD_ROOT/home/services/%{name}/cgi-bin
 install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/services/%{name}/cgi-bin
 install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT%{_mandir}/man8
-# htpasswd.1 confilcts with apache, so temporary commented
-#install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT%{_mandir}/man1
 install extras/makeweb.1 $RPM_BUILD_ROOT%{_mandir}/man1
 install extras/syslogtocern.8 $RPM_BUILD_ROOT%{_mandir}/man8
 install thttpd.8 $RPM_BUILD_ROOT%{_mandir}/man8
+
+# htpasswd
+install extras/htpasswd $RPM_BUILD_ROOT%{_bindir}
+ln -sf %{_bindir}/htpasswd $RPM_BUILD_ROOT%{_sbindir}
+install extras/htpasswd.1 $RPM_BUILD_ROOT%{_mandir}/man1
 
 %if %{with php}
 cd php-%{php_version}
@@ -227,10 +244,18 @@ fi
 %doc php-%{php_version}/{LICENSE,NEWS}
 %endif
 %attr(2755,thttp,thttp) %{_sbindir}/makeweb
-%attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(-,root,root) /home/services/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
 %config(noreplace) %{_sysconfdir}/%{name}.conf
-%{_mandir}/man*/*
+%{_mandir}/man*/m*
+%{_mandir}/man*/r*
+%{_mandir}/man*/s*
+%{_mandir}/man*/t*
+
+%files -n htpasswd-%{name}
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/htpasswd
+%{_sbindir}/htpasswd
+%{_mandir}/man1/htpasswd.1*
