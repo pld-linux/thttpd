@@ -66,10 +66,11 @@ wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów cgi,
 autentyfikacji oraz ssi jest do³±czone.
 
 %prep
-%setup -q %{?_with_php:-a4}
+%setup -q
 %patch0 -p1
 
 %if %{?_with_php:1}%{!?_with_php:0}
+tar xzf %{SOURCE4}
 cd php-%{php_version}
 %patch1 -p1
 %patch2 -p1
@@ -86,6 +87,7 @@ cp -f %{SOURCE3} ../config.h
 %build
 CFLAGS="%{rpmcflags}"; export CFLAGS
 %if %{?_with_php:1}%{!?_with_php:0}
+cd php-%{php_version}
 ./buildconf
 libtoolize --copy --force
 aclocal
