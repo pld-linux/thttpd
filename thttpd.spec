@@ -96,7 +96,7 @@ CFLAGS="%{rpmcflags}"; export CFLAGS
 cd php-%{php_version}
 EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 ./buildconf
-libtoolize --copy --force
+%{__libtoolize}
 aclocal
 %{__autoconf}
 
