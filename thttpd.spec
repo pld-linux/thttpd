@@ -9,6 +9,7 @@ URL:		http://www.acme.com/software/thttpd
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
+Source3:	%{name}-config.h
 Patch0:		%{name}-includes.patch
 Copyright:	distributable (BSD)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -24,6 +25,7 @@ traffic.
 %prep
 %setup -q
 %patch0 -p1
+cp -f %{SOURCE3} config.h
 
 %configure
 
