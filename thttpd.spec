@@ -2,7 +2,7 @@
 # Conditional build:
 # _with_php - without PHP library
 
-%define php_version 4.0.6
+%define		php_version	4.0.6
 
 Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
@@ -28,8 +28,6 @@ Patch8:		php-pldlogo.patch
 Patch9:		php-ac250.patch
 Patch10:	php-pearinstall.patch
 Patch11:	%{name}-remove-php-patch.patch
-#php-4.1.0
-#Patch12:		php-dbplus.patch
 URL:		http://www.acme.com/software/thttpd/
 %if %{?_with_php:1}%{!?_with_php:0}
 BuildRequires:	autoconf >= 1.4
@@ -53,8 +51,7 @@ Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
-%define         extensionsdir %{_libdir}/php
-# %define         peardir         %{_datadir}/pear
+%define         extensionsdir	%{_libdir}/php
 
 %description
 Thttpd is a very compact no-frills httpd serving daemon that can
@@ -148,11 +145,8 @@ cd ..
 
 %install
 rm -rf $RPM_BUILD_ROOT
-
-install -d $RPM_BUILD_ROOT/home/httpd/cgi-bin
-install -d $RPM_BUILD_ROOT/etc/rc.d/init.d
-install -d $RPM_BUILD_ROOT%{_mandir}/man{1,8}
-install -d $RPM_BUILD_ROOT%{_sbindir}
+install -d $RPM_BUILD_ROOT{/home/httpd/cgi-bin,/etc/rc.d/init.d} \
+	$RPM_BUILD_ROOT{%{_mandir}/man{1,8},%{_sbindir}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/thttpd
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}/
@@ -220,11 +214,11 @@ fi
 %if %{?_with_php:1}%{!?_with_php:0}
 %doc php-%{php_version}/{LICENSE,NEWS}
 %endif
-%attr(2755, http, http) %{_sbindir}/makeweb
+%attr(2755,http,http) %{_sbindir}/makeweb
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
 %attr(755,root,root) %{_sbindir}/thttpd
 %attr(-, http, http) /home/httpd
-%attr(0755, root, root) /etc/rc.d/init.d/thttpd
+%attr(754,root,root) /etc/rc.d/init.d/thttpd
 %config %{_sysconfdir}/thttpd.conf
-%doc %{_mandir}/man*/*
+%{_mandir}/man*/*
