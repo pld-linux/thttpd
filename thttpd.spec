@@ -1,11 +1,14 @@
 Summary:	Throttleable lightweight httpd server
+Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.20b
 Release:	1
 Group:		Networking
 Group(de):	Netzwerkwesen
+Group(es):	Red
 Group(pl):	Sieciowe
-URL:		http://www.acme.com/software/thttpd
+Group(pt_BR):	Rede
+License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
@@ -13,15 +16,15 @@ Source3:	%{name}-config.h
 Source4:	php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
 Patch1:		php-DESTDIR.patch
-License:	BSD
-Provides:       httpd
-Provides:       webserver
-Prereq:         /sbin/chkconfig
-Prereq:         /usr/sbin/useradd
-Prereq:         /usr/bin/getgid
-Prereq:         /bin/id
-Prereq:         sh-utils
-Prereq:         rc-scripts
+URL:		http://www.acme.com/software/thttpd/
+Provides:	httpd
+Provides:	webserver
+Prereq:		/sbin/chkconfig
+Prereq:		/usr/sbin/useradd
+Prereq:		/usr/bin/getgid
+Prereq:		/bin/id
+Prereq:		sh-utils
+Prereq:		rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -34,10 +37,10 @@ traffic.
 
 %description -l pl
 Thttpd jest kompaktowym serwerem http zdolnym obs³ugiwaæ bardzo
-wysokie obci±¿enia. Mimo i¿ brakuje mu wielu zaawansowanych
-mo¿liwo¶ci z Apache to jednak jest niezwykle wydajny je¶li
-chodzi o wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów
-cgi, autentyfikacji oraz ssi jest do³±czone.
+wysokie obci±¿enia. Mimo i¿ brakuje mu wielu zaawansowanych mo¿liwo¶ci
+z Apache to jednak jest niezwykle wydajny je¶li chodzi o
+wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów cgi,
+autentyfikacji oraz ssi jest do³±czone.
 
 %prep
 %setup -q -a4
@@ -98,6 +101,9 @@ cd php-4.0.4pl1
 
 gzip -9nf ../README ../TODO LICENSE NEWS
 
+%clean
+rm -rf $RPM_BUILD_ROOT
+
 %pre
 if [ -n "`getgid http`" ]; then
         if [ "`getgid http`" != "51" ]; then
@@ -129,9 +135,6 @@ if [ "$1" = "0" ]; then
         /usr/sbin/userdel http
         /usr/sbin/groupdel http
 fi
-
-%clean
-rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
