@@ -13,7 +13,7 @@ Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
-Source4:	php-4.0.4pl1.tar.gz
+Source4:	http://www.php.net/distributions/php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
 Patch1:		php-DESTDIR.patch
 URL:		http://www.acme.com/software/thttpd/
