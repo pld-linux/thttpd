@@ -8,7 +8,7 @@ Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	2
+Release:	3
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -143,21 +143,21 @@ cd ..
 	prefix=%{_prefix} \
 	BINDIR=%{_sbindir} \
 	MANDIR=%{_mandir} \
-	WEBDIR=/home/services/httpd/html \
-	CGIBINDIR=/home/services/httpd/cgi-bin \
-	WEBGROUP=http
+	WEBDIR=/home/services/%{name}/html \
+	CGIBINDIR=/home/services/%{name}/cgi-bin \
+	WEBGROUP=%{name}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/home/services/httpd/{cgi-bin,html},%{_sbindir}} \
+install -d $RPM_BUILD_ROOT{/home/services/%{name}/{cgi-bin,html},%{_sbindir}} \
 	$RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sysconfdir},%{_mandir}/man{1,8}}
 
-install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/thttpd
+install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/%{name}
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
 install thttpd $RPM_BUILD_ROOT%{_sbindir}
 install extras/{htpasswd,makeweb,syslogtocern} $RPM_BUILD_ROOT%{_sbindir}
-install cgi-bin/printenv $RPM_BUILD_ROOT/home/services/httpd/cgi-bin
-install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/services/httpd/cgi-bin
+install cgi-bin/printenv $RPM_BUILD_ROOT/home/services/%{name}/cgi-bin
+install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/services/%{name}/cgi-bin
 install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT%{_mandir}/man8
 # htpasswd.1 confilcts with apache, so temporary commented
 #install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT%{_mandir}/man1
@@ -176,21 +176,21 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid http`" ]; then
-	if [ "`getgid http`" != "51" ]; then
-		echo "Error: group http doesn't have gid=51. Correct this before installing %{name}." 1>&2
+if [ -n "`getgid thttp`" ]; then
+	if [ "`getgid thttp`" != "131" ]; then
+		echo "Error: group thttp doesn't have gid=131. Correct this before installing %{name}." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/groupadd -g 51 -r -f http
+	/usr/sbin/groupadd -g 131 -r -f thttp
 fi
-if [ -n "`id -u http 2>/dev/null`" ]; then
-	if [ "`id -u http`" != "51" ]; then
-		echo "Error: user http doesn't have uid=51. Correct this before installing %{name}." 1>&2
+if [ -n "`id -u thttp 2>/dev/null`" ]; then
+	if [ "`id -u thttp`" != "117" ]; then
+		echo "Error: user thttp doesn't have uid=117. Correct this before installing %{name}." 1>&2
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+	/usr/sbin/useradd -u 117 -r -d /home/services/%{name} -s /bin/false -c "tHTTP User" -g thttp thttp 1>&2
 fi
 
 %post
@@ -211,8 +211,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel http
-	/usr/sbin/groupdel http
+	/usr/sbin/userdel thttp
+	/usr/sbin/groupdel thttp
 fi
 
 %files
@@ -221,11 +221,11 @@ fi
 %if %{with php}
 %doc php-%{php_version}/{LICENSE,NEWS}
 %endif
-%attr(2755,http,http) %{_sbindir}/makeweb
+%attr(2755,thttp,thttp) %{_sbindir}/makeweb
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
-%attr(755,root,root) %{_sbindir}/thttpd
-%attr(-,root,root) /home/services/httpd
-%attr(754,root,root) /etc/rc.d/init.d/thttpd
-%config %{_sysconfdir}/thttpd.conf
+%attr(755,root,root) %{_sbindir}/%{name}
+%attr(-,root,root) /home/services/%{name}
+%attr(754,root,root) /etc/rc.d/init.d/%{name}
+%config %{_sysconfdir}/%{name}.conf
 %{_mandir}/man*/*
