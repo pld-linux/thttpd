@@ -41,6 +41,7 @@ BuildRequires:	gd-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	mysql-devel
 %endif
+BuildRequires:	rpmbuild(macros) >= 1.159
 Provides:	httpd
 Provides:	webserver
 PreReq:		rc-scripts
@@ -50,8 +51,10 @@ Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
 Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/userdel
 Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
+Provides:	group(thttp)
+Provides:	user(thttp)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		extensionsdir	%{_libdir}/php
@@ -176,16 +179,16 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`getgid thttp`" ]; then
-	if [ "`getgid thttp`" != "131" ]; then
+if [ -n "`/usr/bin/getgid thttp`" ]; then
+	if [ "`/usr/bin/getgid thttp`" != "131" ]; then
 		echo "Error: group thttp doesn't have gid=131. Correct this before installing %{name}." 1>&2
 		exit 1
 	fi
 else
 	/usr/sbin/groupadd -g 131 -r -f thttp
 fi
-if [ -n "`id -u thttp 2>/dev/null`" ]; then
-	if [ "`id -u thttp`" != "117" ]; then
+if [ -n "`/bin/id -u thttp 2>/dev/null`" ]; then
+	if [ "`/bin/id -u thttp`" != "117" ]; then
 		echo "Error: user thttp doesn't have uid=117. Correct this before installing %{name}." 1>&2
 		exit 1
 	fi
@@ -211,8 +214,8 @@ fi
 
 %postun
 if [ "$1" = "0" ]; then
-	/usr/sbin/userdel thttp
-	/usr/sbin/groupdel thttp
+	%userremove thttp
+	%groupremove thttp
 fi
 
 %files
