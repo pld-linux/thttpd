@@ -2,7 +2,7 @@
 #
 # thttpd	Tiny/turbo/throttling http daemon
 #
-# chkconfig:	2345 99 01
+# chkconfig: 345 85 15
 # description:	Jef Poskanzer's tiny/turbo/throttling http daemon
 # processname:	thttpd
 # pidfile:	/var/run/thttpd.pid
