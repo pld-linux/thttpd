@@ -11,7 +11,7 @@ Summary:	Throttleable lightweight HTTP server
 Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	4.1
+Release:	4.2
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -81,9 +81,7 @@ uwierzytelniania, oraz SSI.
 Summary:        thttpd htpasswd utility
 Group:          Networking/Utilities
 Provides:       htpasswd
-Obsoletes:      htpasswd-apache1
-Obsoletes:      htpasswd-apache
-Obsoletes:	htpasswd-mini_httpd
+Obsoletes:      htpasswd
 
 %description -n htpasswd-%{name}
 htpasswd from thttpd
