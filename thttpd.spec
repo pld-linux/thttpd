@@ -2,13 +2,13 @@
 # Conditional build:
 # _with_php - without PHP library
 
-%define php_version 4.1.0
+%define php_version 4.0.6
 
 Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.20c
-Release:	2
+Release:	3
 Group:		Networking
 Group(de):	Netzwerkwesen
 Group(es):	Red
@@ -22,15 +22,19 @@ Source3:	%{name}-config.h
 Patch0:		%{name}-includes.patch
 %if %{?_with_php:1}%{!?_with_php:0}
 Source4:	http://www.php.net/distributions/php-%{php_version}.tar.gz
-Patch1:		php-mysql-socket.patch
-Patch2:		php-mail.patch
-Patch3:		php-link-libs.patch
-Patch4:		php-session-path.patch
-Patch5:		php-am_ac_lt.patch
-Patch6:		php-shared.patch
-Patch7:		php-pldlogo.patch
-Patch8:		php-ac250.patch
-Patch9:		php-dbplus.patch
+Patch1:		%{name}-php.patch
+Patch2:		php-mysql-socket.patch
+Patch3:		php-mail.patch
+Patch4:		php-link-libs.patch
+Patch5:		php-session-path.patch
+Patch6:		php-am_ac_lt.patch
+Patch7:		php-shared.patch
+Patch8:		php-pldlogo.patch
+Patch9:		php-ac250.patch
+Patch10:		php-pearinstall.patch
+Patch11:		%{name}-remove-php-patch.patch
+#php-4.1.0
+#Patch12:		php-dbplus.patch
 BuildRequires: gd-devel
 BuildRequires: db3-devel
 BuildRequires:  autoconf >= 1.4
@@ -49,6 +53,9 @@ Prereq:         sh-utils
 Prereq:         rc-scripts
 URL:		http://www.acme.com/software/thttpd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
+
+%define         extensionsdir %{_libdir}/php
+# %define         peardir         %{_datadir}/pear
 
 %description
 Thttpd is a very compact no-frills httpd serving daemon that can
@@ -70,9 +77,9 @@ autentyfikacji oraz ssi jest do³±czone.
 %patch0 -p1
 
 %if %{?_with_php:1}%{!?_with_php:0}
+%patch1 -p1
 tar xzf %{SOURCE4}
 cd php-%{php_version}
-%patch1 -p1
 %patch2 -p1
 %patch3 -p1
 %patch4 -p1
@@ -81,6 +88,9 @@ cd php-%{php_version}
 %patch7 -p1
 %patch8 -p1
 %patch9 -p1
+%patch10 -p1
+%patch11 -p1
+#%patch10 -p1
 cp -f %{SOURCE3} ../config.h
 %endif
 
@@ -88,6 +98,7 @@ cp -f %{SOURCE3} ../config.h
 CFLAGS="%{rpmcflags}"; export CFLAGS
 %if %{?_with_php:1}%{!?_with_php:0}
 cd php-%{php_version}
+EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 ./buildconf
 libtoolize --copy --force
 aclocal
@@ -115,10 +126,11 @@ autoconf
    --with-gettext \
 	--without-mysql \
    --with-zlib \
-	--with-gd
+	--with-gd \
 	--with-bz2 \
 	--with-mysql=/usr \
 	--with-mysql-sock=/var/lib/mysql/mysql.sock
+#	--with-pear=%{peardir} \
 	
 %{__make}
 # this install adds special options to thttpd Makefile.in
