@@ -1,6 +1,6 @@
 
 # Conditional build:
-# _with_php - without PHP library
+# _with_php - with PHP library
 
 %define		php_version	4.0.6
 
@@ -16,6 +16,7 @@ Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
 Patch0:		%{name}-includes.patch
+%if %{?_with_php:1}%{!?_with_php:0}
 Source4:	http://www.php.net/distributions/php-%{php_version}.tar.gz
 Patch1:		%{name}-php.patch
 Patch2:		php-mysql-socket.patch
@@ -28,6 +29,7 @@ Patch8:		php-pldlogo.patch
 Patch9:		php-ac250.patch
 Patch10:	php-pearinstall.patch
 Patch11:	%{name}-remove-php-patch.patch
+%endif
 URL:		http://www.acme.com/software/thttpd/
 %if %{?_with_php:1}%{!?_with_php:0}
 BuildRequires:	autoconf >= 1.4
