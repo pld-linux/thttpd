@@ -8,7 +8,7 @@ Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	1
+Release:	2
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -139,24 +139,25 @@ cd ..
 # unfortunately this configure _must_ be here
 %configure2_13
 %{__make} \
-	WEBDIR=/home/httpd/html \
-	BINDIR=%{_sbindir} \
+	CCOPT="%{rpmcflags}" \
 	prefix=%{_prefix} \
-	CGIBINDIR=/home/httpd/cgi-bin \
+	BINDIR=%{_sbindir} \
 	MANDIR=%{_mandir} \
+	WEBDIR=/home/services/httpd/html \
+	CGIBINDIR=/home/services/httpd/cgi-bin \
 	WEBGROUP=http
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{/home/httpd/cgi-bin,/etc/rc.d/init.d} \
-	$RPM_BUILD_ROOT{%{_mandir}/man{1,8},%{_sbindir}}
+install -d $RPM_BUILD_ROOT{/home/services/httpd/{cgi-bin,html},%{_sbindir}} \
+	$RPM_BUILD_ROOT{/etc/rc.d/init.d,%{_sysconfdir},%{_mandir}/man{1,8}}
 
 install %{SOURCE1} $RPM_BUILD_ROOT/etc/rc.d/init.d/thttpd
 install %{SOURCE2} $RPM_BUILD_ROOT%{_sysconfdir}
 install thttpd $RPM_BUILD_ROOT%{_sbindir}
 install extras/{htpasswd,makeweb,syslogtocern} $RPM_BUILD_ROOT%{_sbindir}
-install cgi-bin/printenv $RPM_BUILD_ROOT/home/httpd/cgi-bin
-install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/httpd/cgi-bin
+install cgi-bin/printenv $RPM_BUILD_ROOT/home/services/httpd/cgi-bin
+install cgi-src/{phf,redirect,ssi} $RPM_BUILD_ROOT/home/services/httpd/cgi-bin
 install cgi-src/{redirect.8,ssi.8} $RPM_BUILD_ROOT%{_mandir}/man8
 # htpasswd.1 confilcts with apache, so temporary commented
 #install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT%{_mandir}/man1
@@ -189,7 +190,7 @@ if [ -n "`id -u http 2>/dev/null`" ]; then
 		exit 1
 	fi
 else
-	/usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+	/usr/sbin/useradd -u 51 -r -d /home/services/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
 fi
 
 %post
@@ -224,7 +225,7 @@ fi
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
 %attr(755,root,root) %{_sbindir}/thttpd
-%attr(-, http, http) /home/httpd
+%attr(-,root,root) /home/services/httpd
 %attr(754,root,root) /etc/rc.d/init.d/thttpd
 %config %{_sysconfdir}/thttpd.conf
 %{_mandir}/man*/*
