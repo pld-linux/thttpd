@@ -7,12 +7,12 @@
 Summary:	Throttleable lightweight httpd server
 Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
 Name:		thttpd
-Version:	2.20c
-Release:	6
+Version:	2.24
+Release:	1
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
-# Source0-md5:	0ba609a3b8564289f29ac75bced9181f
+# Source0-md5:	9e72c27986548d0cbc8ea850b7b47bdd
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
@@ -93,6 +93,7 @@ cp -f %{SOURCE3} ../config.h
 %endif
 
 %build
+install %{_datadir}/automake/config.* .
 CFLAGS="%{rpmcflags}"; export CFLAGS
 %if %{?_with_php:1}%{!?_with_php:0}
 cd php-%{php_version}
