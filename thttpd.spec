@@ -1,5 +1,6 @@
 #
-# TODO: separate package with htpasswd
+# TODO: 
+# - polish description and summary at package htpasswd
 #
 # Conditional build:
 %bcond_with php		# with PHP library
