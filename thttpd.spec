@@ -19,30 +19,46 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %description
 Thttpd is a very compact no-frills httpd serving daemon that can
 handle very high loads. While lacking many of the advanced features of
-Apachee, thttpd operates without forking and is extremely efficient in
+Apache, thttpd operates without forking and is extremely efficient in
 memory use. Basic support for cgi scripts, authentication, and ssi is
 provided for. Advanced features include the ability to throttle
 traffic.
 
+%description -l pl
+Thttpd jest kompaktowym serwerem http zdolnym obs³ugiwaæ bardzo
+wysokie obci±¿enia. Mimo i¿ brakuje mu wielu zaawansowanych
+mo¿liwo¶ci z Apache to jednak jest niezwykle wydajny je¶li
+chodzi o wykorzystywanie pamiêci. Podstawowe wsparcie dla skryptów
+cgi, autentyfikacji oraz ssi jest do³±czone.
+
 %prep
-%setup -q
+%setup -q -a4
 %patch0 -p1
-tar -zxf %{SOURCE4}
 cd php-4.0.4pl1
 %patch1 -p1
 cp -f %{SOURCE3} ../config.h
 
-%configure --with-thttpd=..
+%configure \
+	--with-thttpd=.. \
+	--enable-bcmath \
+	--with-bz2 \
+	--enable-calendar \
+	--enable-ctype \
+	--with-db3 \
+	--enable-ftp \
+	--with-gd
+	
 cd ..
 %configure
 
 %build
-cd php-4.0.4pl1
+cd php-*
 %{__make}
 cd ..
 %{__make} \
 	WEBDIR=/home/httpd/html \
-	BINDIR=%{_sbindir} prefix=%{_prefix} \
+	BINDIR=%{_sbindir} \
+	prefix=%{_prefix} \
 	CGIBINDIR=/home/httpd/cgi-bin \
 	MANDIR=%{_mandir} \
 	WEBGROUP=http
@@ -72,7 +88,6 @@ cd php-4.0.4pl1
 gzip -9nf ../README ../TODO LICENSE NEWS
 
 %pre
-
 grep '^http:' /etc/passwd >/dev/null || \
 	/usr/sbin/useradd -r http
 
