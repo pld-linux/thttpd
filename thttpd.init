@@ -20,7 +20,7 @@
 # Check that networking is up.
 if is_no "${NETWORKING}"; then
 	# nls "ERROR: Networking is down. %s can't be run." <service>
-	msg_Network_Down thttpd
+	msg_network_down thttpd
 	exit 1
 fi
 
@@ -34,7 +34,7 @@ case "$1" in
 		RETVAL=$?
 		[ $RETVAL -eq 0 ] && touch /var/lock/subsys/thttpd
 	else
-		msg_Already_Running thttpd
+		msg_already_running thttpd
 		exit 1
 	fi
 	;;
@@ -45,7 +45,7 @@ case "$1" in
 		killproc thttpd
 		rm -f /var/lock/subsys/thttpd /var/run/thttpd.pid /var/run/thttpd.loc* >/dev/null 2>&1
 	else
-		msg_Not_Running thttpd
+		msg_not_running thttpd
 		exit 1
 	fi
 	;;
@@ -58,7 +58,7 @@ case "$1" in
 	$0 start
 	;;
      *)
-	msg_Usage "Usage: $0 {start|stop|restart|status}"
+	msg_usage "Usage: $0 {start|stop|restart|status}"
 	exit 1
 	;;
 esac
