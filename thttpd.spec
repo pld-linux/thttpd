@@ -27,26 +27,26 @@ Patch6:		php-am_ac_lt.patch
 Patch7:		php-shared.patch
 Patch8:		php-pldlogo.patch
 Patch9:		php-ac250.patch
-Patch10:		php-pearinstall.patch
-Patch11:		%{name}-remove-php-patch.patch
+Patch10:	php-pearinstall.patch
+Patch11:	%{name}-remove-php-patch.patch
 #php-4.1.0
 #Patch12:		php-dbplus.patch
-BuildRequires: gd-devel
-BuildRequires: db3-devel
-BuildRequires:  autoconf >= 1.4
-BuildRequires:  automake >= 1.4d
-BuildRequires:  libtool >= 1.4
-BuildRequires: bzip2-devel
-BuildRequires: mysql-devel
+BuildRequires:	gd-devel
+BuildRequires:	db3-devel
+BuildRequires:	autoconf >= 1.4
+BuildRequires:	automake >= 1.4d
+BuildRequires:	libtool >= 1.4
+BuildRequires:	bzip2-devel
+BuildRequires:	mysql-devel
 %endif
-Provides:       httpd
-Provides:       webserver
-Prereq:         /sbin/chkconfig
-Prereq:         /usr/sbin/useradd
-Prereq:         /usr/bin/getgid
-Prereq:         /bin/id
-Prereq:         sh-utils
-Prereq:         rc-scripts
+Provides:	httpd
+Provides:	webserver
+Prereq:		/sbin/chkconfig
+Prereq:		/usr/sbin/useradd
+Prereq:		/usr/bin/getgid
+Prereq:		/bin/id
+Prereq:		sh-utils
+Prereq:		rc-scripts
 URL:		http://www.acme.com/software/thttpd/
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -107,27 +107,27 @@ autoconf
 	--enable-calendar \
 	--enable-ctype \
 	--enable-ftp \
-   --enable-magic-quotes \
-   --enable-shared \
-   --enable-track-vars \
-   --enable-safe-mode \
-   --enable-trans-sid \
-   --enable-sysvsem \
-   --enable-sysvshm \
-   --enable-shmop \
-   --enable-session \
-   --enable-exif \
+	--enable-magic-quotes \
+	--enable-shared \
+	--enable-track-vars \
+	--enable-safe-mode \
+	--enable-trans-sid \
+	--enable-sysvsem \
+	--enable-sysvshm \
+	--enable-shmop \
+	--enable-session \
+	--enable-exif \
 	--with-db3 \
-   --with-regex=php \
-   --with-gettext \
+	--with-regex=php \
+	--with-gettext \
 	--without-mysql \
-   --with-zlib \
+	--with-zlib \
 	--with-gd \
 	--with-bz2 \
 	--with-mysql=/usr \
 	--with-mysql-sock=/var/lib/mysql/mysql.sock
 #	--with-pear=%{peardir} \
-	
+
 %{__make}
 # this install adds special options to thttpd Makefile.in
 %{__make} DESTDIR=$RPM_BUILD_ROOT install
@@ -169,7 +169,7 @@ gzip -9nf LICENSE NEWS
 cd ..
 %endif
 
-gzip -9nf README TODO 
+gzip -9nf README TODO
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -218,7 +218,7 @@ fi
 
 %files
 %defattr(644,root,root,755)
-%doc *.gz 
+%doc *.gz
 %if %{?_with_php:1}%{!?_with_php:0}
 %doc php-%{php_version}/*.gz
 %endif
