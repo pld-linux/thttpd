@@ -13,7 +13,15 @@ Source3:	%{name}-config.h
 Source4:	php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
 Patch1:		php-DESTDIR.patch
-Copyright:	distributable (BSD)
+Copyright:	BSD
+Provides:       httpd
+Provides:       webserver
+Prereq:         /sbin/chkconfig
+Prereq:         /usr/sbin/useradd
+Prereq:         /usr/bin/getgid
+Prereq:         /bin/id
+Prereq:         sh-utils
+Prereq:         rc-scripts
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -88,24 +96,43 @@ cd php-4.0.4pl1
 gzip -9nf ../README ../TODO LICENSE NEWS
 
 %pre
-grep '^http:' /etc/passwd >/dev/null || \
-	/usr/sbin/useradd -r http
-
-grep '^http:' /etc/group >/dev/null || \
-	/usr/sbin/groupadd -r http
+if [ -n "`getgid http`" ]; then
+        if [ "`getgid http`" != "51" ]; then
+                echo "Warning: group http haven't gid=51. Correct this before install %{name}" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/groupadd -g 51 -r -f http
+fi
+if [ -n "`id -u http 2>/dev/null`" ]; then
+        if [ "`id -u http`" != "51" ]; then
+                echo "Warning: user http haven't uid=51. Correct this before install apache" 1>&2
+                exit 1
+        fi
+else
+        /usr/sbin/useradd -u 51 -r -d /home/httpd -s /bin/false -c "HTTP User" -g http http 1>&2
+fi
 
 %post
-/sbin/chkconfig --add thttpd
+/sbin/chkconfig --add %{name}
 
 %preun
-/sbin/chkconfig --del thttpd
+if [ "$1" = "0" ]; then
+	/sbin/chkconfig --del %{name}
+fi
+
+%postun
+if [ "$1" = "0" ]; then
+        /usr/sbin/userdel http
+        /usr/sbin/groupdel http
+fi
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.gz TODO.gz LICENSE.gz NEWS.gz
+%doc *.gz */*.gz
 %attr(2755, http, http) %{_sbindir}/makeweb
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
