@@ -34,7 +34,8 @@ cp -f %{SOURCE3} config.h
 	WEBDIR=/home/httpd/html \
 	BINDIR=%{_sbindir} prefix=%{_prefix} \
 	CGIBINDIR=/home/httpd/cgi-bin \
-	MANDIR=%{_mandir}
+	MANDIR=%{_mandir} \
+	WEBGROUP=http
 
 %install
 rm -rf $RPM_BUILD_ROOT
