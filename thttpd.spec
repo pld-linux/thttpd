@@ -1,7 +1,4 @@
 #
-# TODO: 
-# - polish description and summary at package htpasswd
-#
 # Conditional build:
 %bcond_with php		# with PHP library
 #
@@ -45,8 +42,6 @@ BuildRequires:	libtool >= 1.4
 BuildRequires:	mysql-devel
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.159
-Provides:	httpd
-Provides:	webserver
 PreReq:		rc-scripts
 Requires(pre):	sh-utils
 Requires(pre):	/bin/id
@@ -58,7 +53,9 @@ Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
 Requires:	htpasswd
 Provides:	group(thttp)
+Provides:	httpd
 Provides:	user(thttp)
+Provides:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		extensionsdir	%{_libdir}/php
@@ -78,16 +75,23 @@ Dostarczane jest podstawowe wsparcie dla skryptów CGI,
 uwierzytelniania, oraz SSI.
 
 %package -n htpasswd-%{name}
-Summary:        thttpd htpasswd utility
-Group:          Networking/Utilities
-Provides:       htpasswd
-Obsoletes:      htpasswd
+Summary:	thttpd htpasswd utility
+Summary(pl):	Narzêdzie htpasswd z thttpd
+Group:		Networking/Utilities
+Provides:	htpasswd
+Obsoletes:	htpasswd
 
 %description -n htpasswd-%{name}
-htpasswd from thttpd
+htpasswd is used to create and update the flat-files used to store
+usernames and password for basic authentication of HTTP users. This
+package contains htpasswd from thttpd; it supports only CRYPT
+encryption algorithm.
 
-Usage: htpasswd [-c] passwordfile username
-The -c flag creates a new file.
+%description -n htpasswd-%{name} -l pl
+htpasswd s³u¿y do tworzenia i uaktualniania p³askich plików s³u¿±cych
+do przechowywania nazw u¿ytkowników i hase³ do uwierzytelnienia basic
+u¿ytkowników HTTP. Ten pakiet zawiera htpasswd z thttpd; ta wersja
+obs³uguje wy³±cznie has³a zaszyfrowane przez CRYPT.
 
 %prep
 %setup -q
