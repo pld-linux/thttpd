@@ -82,7 +82,7 @@ Summary:        thttpd htpasswd utility
 Group:          Networking/Utilities
 Provides:       htpasswd
 Obsoletes:      htpasswd-apache1
-Obsoletes:      htpasswd-apache2
+Obsoletes:      htpasswd-apache
 Obsoletes:	htpasswd-mini_httpd
 
 %description -n htpasswd-%{name}
