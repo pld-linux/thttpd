@@ -57,12 +57,15 @@ cp -f %{SOURCE3} ../config.h
 	--with-gd
 	
 cd ..
-%configure
 
 %build
 cd php-*
 %{__make}
+# this install adds special options to thttpd Makefile.in
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
 cd ..
+# unfortunately this configure _must_ be here
+%configure
 %{__make} \
 	WEBDIR=/home/httpd/html \
 	BINDIR=%{_sbindir} \
