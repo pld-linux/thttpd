@@ -227,5 +227,5 @@ fi
 %attr(755,root,root) %{_sbindir}/%{name}
 %attr(-,root,root) /home/services/%{name}
 %attr(754,root,root) /etc/rc.d/init.d/%{name}
-%config %{_sysconfdir}/%{name}.conf
+%config(noreplace) %{_sysconfdir}/%{name}.conf
 %{_mandir}/man*/*
