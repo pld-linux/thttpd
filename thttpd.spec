@@ -58,7 +58,10 @@ gzip -9nf README TODO
 %pre
 
 grep '^httpd:' /etc/passwd >/dev/null || \
-	/usr/sbin/adduser -r httpd
+	/usr/sbin/useradd -r httpd
+
+grep '^httpd:' /etc/group >/dev/null || \
+	/usr/sbin/groupadd -r httpd
 
 %post
 /sbin/chkconfig --add thttpd
