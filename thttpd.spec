@@ -11,7 +11,7 @@ Summary:	Throttleable lightweight HTTP server
 Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	4
+Release:	4.1
 Group:		Networking
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
