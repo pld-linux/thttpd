@@ -10,7 +10,9 @@ Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
 Source2:	%{name}.conf
 Source3:	%{name}-config.h
+Source4:	php-4.0.4pl1.tar.gz
 Patch0:		%{name}-includes.patch
+Patch1:		php-DESTDIR.patch
 Copyright:	distributable (BSD)
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
@@ -25,11 +27,19 @@ traffic.
 %prep
 %setup -q
 %patch0 -p1
-cp -f %{SOURCE3} config.h
+tar -zxf %{SOURCE4}
+cd php-4.0.4pl1
+%patch1 -p1
+cp -f %{SOURCE3} ../config.h
 
+%configure --with-thttpd=..
+cd ..
 %configure
 
 %build
+cd php-4.0.4pl1
+%{__make}
+cd ..
 %{__make} \
 	WEBDIR=/home/httpd/html \
 	BINDIR=%{_sbindir} prefix=%{_prefix} \
@@ -56,7 +66,10 @@ install extras/{htpasswd.1,makeweb.1} $RPM_BUILD_ROOT/%{_mandir}/man1/
 install extras/syslogtocern.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
 install thttpd.8 $RPM_BUILD_ROOT/%{_mandir}/man8/
 
-gzip -9nf README TODO
+cd php-4.0.4pl1
+%{__make} DESTDIR=$RPM_BUILD_ROOT install
+
+gzip -9nf ../README ../TODO LICENSE NEWS
 
 %pre
 
@@ -77,7 +90,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README.gz TODO.gz
+%doc README.gz TODO.gz LICENSE.gz NEWS.gz
 %attr(2755, http, http) %{_sbindir}/makeweb
 %attr(755,root,root) %{_sbindir}/htpasswd
 %attr(755,root,root) %{_sbindir}/syslogtocern
