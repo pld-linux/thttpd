@@ -4,8 +4,8 @@
 #
 %define		php_version	4.0.6
 
-Summary:	Throttleable lightweight httpd server
-Summary(pl):	Niedu¿y serwer httpd do du¿ych obci±¿eñ
+Summary:	Throttleable lightweight HTTP server
+Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
 Release:	3
@@ -60,7 +60,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		extensionsdir	%{_libdir}/php
 
 %description
-Thttpd is a very compact no-frills httpd serving daemon that can
+Thttpd is a very compact no-frills HTTP serving daemon that can
 handle very high loads. While lacking many of the advanced features of
 Apache, thttpd operates without forking and is extremely efficient in
 memory use. Basic support for CGI scripts, authentication and SSI is
