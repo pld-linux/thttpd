@@ -99,7 +99,7 @@ cd php-%{php_version}
 EXTENSION_DIR="%{extensionsdir}"; export EXTENSION_DIR
 ./buildconf
 %{__libtoolize}
-aclocal
+%{__aclocal}
 %{__autoconf}
 
 %configure \
