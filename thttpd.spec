@@ -10,10 +10,6 @@ Name:		thttpd
 Version:	2.20c
 Release:	3
 Group:		Networking
-Group(de):	Netzwerkwesen
-Group(es):	Red
-Group(pl):	Sieciowe
-Group(pt_BR):	Rede
 License:	BSD
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 Source1:	%{name}.init
