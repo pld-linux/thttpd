@@ -41,7 +41,7 @@ BuildRequires:	gd-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	mysql-devel
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.159
+BuildRequires:	rpmbuild(macros) >= 1.202
 PreReq:		rc-scripts
 Requires(pre):	sh-utils
 Requires(pre):	/bin/id
@@ -202,22 +202,8 @@ cd ..
 rm -rf $RPM_BUILD_ROOT
 
 %pre
-if [ -n "`/usr/bin/getgid thttp`" ]; then
-	if [ "`/usr/bin/getgid thttp`" != "131" ]; then
-		echo "Error: group thttp doesn't have gid=131. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/groupadd -g 131 -r -f thttp
-fi
-if [ -n "`/bin/id -u thttp 2>/dev/null`" ]; then
-	if [ "`/bin/id -u thttp`" != "117" ]; then
-		echo "Error: user thttp doesn't have uid=117. Correct this before installing %{name}." 1>&2
-		exit 1
-	fi
-else
-	/usr/sbin/useradd -u 117 -r -d /home/services/%{name} -s /bin/false -c "tHTTP User" -g thttp thttp 1>&2
-fi
+%groupadd -g 131 -r -f thttp
+%useradd -u 117 -r -d /home/services/%{name} -s /bin/false -c "tHTTP User" -g thttp thttp
 
 %post
 /sbin/chkconfig --add %{name}
