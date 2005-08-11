@@ -1,6 +1,6 @@
 #
 # Conditional build:
-%bcond_with php		# with PHP library
+%bcond_with	php		# with PHP library
 #
 %define		php_version	4.0.6
 
