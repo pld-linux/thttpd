@@ -9,8 +9,8 @@ Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
 Release:	5
-Group:		Networking
 License:	BSD
+Group:		Networking
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 # Source0-md5:	a0e9cd87455d3a0ea11e5ea7e947adf6
 Source1:	%{name}.init
@@ -42,18 +42,17 @@ BuildRequires:	libtool >= 1.4
 BuildRequires:	mysql-devel
 %endif
 BuildRequires:	rpmbuild(macros) >= 1.202
-PreReq:		rc-scripts
-Requires(pre):	sh-utils
+Requires(post,preun):	/sbin/chkconfig
+Requires(postun):	/usr/sbin/groupdel
+Requires(postun):	/usr/sbin/userdel
 Requires(pre):	/bin/id
 Requires(pre):	/usr/bin/getgid
 Requires(pre):	/usr/sbin/groupadd
 Requires(pre):	/usr/sbin/useradd
-Requires(post,preun):	/sbin/chkconfig
-Requires(postun):	/usr/sbin/groupdel
-Requires(postun):	/usr/sbin/userdel
+Requires(pre):	sh-utils
 Requires:	htpasswd
+Requires:	rc-scripts
 Provides:	group(thttp)
-Provides:	httpd
 Provides:	user(thttp)
 Provides:	webserver
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
