@@ -41,7 +41,7 @@ BuildRequires:	gd-devel
 BuildRequires:	libtool >= 1.4
 BuildRequires:	mysql-devel
 %endif
-BuildRequires:	rpmbuild(macros) >= 1.202
+BuildRequires:	rpmbuild(macros) >= 1.268
 Requires(post,preun):	/sbin/chkconfig
 Requires(postun):	/usr/sbin/groupdel
 Requires(postun):	/usr/sbin/userdel
@@ -206,17 +206,11 @@ rm -rf $RPM_BUILD_ROOT
 
 %post
 /sbin/chkconfig --add %{name}
-if [ -f /var/lock/subsys/thttpd ]; then
-	/etc/rc.d/init.d/thttpd restart 1>&2
-else
-	echo "Run \"/etc/rc.d/init.d/thttpd start\" to start %{name} daemon."
-fi
+%service thttpd restart "%{name} daemon"
 
 %preun
 if [ "$1" = "0" ]; then
-	if [ -f /var/lock/subsys/thttpd ]; then
-		/etc/rc.d/init.d/thttpd stop 1>&2
-	fi
+	%service thttpd stop
 	/sbin/chkconfig --del %{name}
 fi
 
