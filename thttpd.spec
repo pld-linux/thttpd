@@ -8,7 +8,7 @@ Summary:	Throttleable lightweight HTTP server
 Summary(pl):	Niedu¿y serwer HTTP do du¿ych obci±¿eñ
 Name:		thttpd
 Version:	2.25b
-Release:	7
+Release:	8
 License:	BSD
 Group:		Networking
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
@@ -60,8 +60,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		extensionsdir	%{_libdir}/php
 
 %description
-Thttpd is a very compact no-frills HTTP serving daemon that can
-handle very high loads. While lacking many of the advanced features of
+Thttpd is a very compact no-frills HTTP serving daemon that can handle
+very high loads. While lacking many of the advanced features of
 Apache, thttpd operates without forking and is extremely efficient in
 memory use. Basic support for CGI scripts, authentication and SSI is
 provided. Advanced features include the ability to throttle traffic.
