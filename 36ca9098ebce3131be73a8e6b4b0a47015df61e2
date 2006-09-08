@@ -1,0 +1,7 @@
+- release: 2
+- upgrade to 2.20c
+- added conditional build with php (not ready yet, since php 4.1.0 is not
+  ready, too)
+- added more options to php and buildrequires
+- some cleanups
+- added restart and stop in %post/%preun scripts
