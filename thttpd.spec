@@ -5,7 +5,7 @@
 %define		php_version	4.0.6
 
 Summary:	Throttleable lightweight HTTP server
-Summary(pl):	Nieduøy serwer HTTP do duøych obci±øeÒ
+Summary(pl.UTF-8):   Niedu≈ºy serwer HTTP do du≈ºych obciƒÖ≈ºe≈Ñ
 Name:		thttpd
 Version:	2.25b
 Release:	8
@@ -66,16 +66,16 @@ Apache, thttpd operates without forking and is extremely efficient in
 memory use. Basic support for CGI scripts, authentication and SSI is
 provided. Advanced features include the ability to throttle traffic.
 
-%description -l pl
-Thttpd jest kompaktowym serwerem HTTP, zdolnym obs≥ugiwaÊ bardzo
-wysokie obci±øenia. Mimo iø brakuje mu wielu zaawansowanych moøliwo∂ci
-Apache, jest niezwykle wydajny je∂li chodzi o wykorzystywanie pamiÍci.
-Dostarczane jest podstawowe wsparcie dla skryptÛw CGI,
+%description -l pl.UTF-8
+Thttpd jest kompaktowym serwerem HTTP, zdolnym obs≈Çugiwaƒá bardzo
+wysokie obciƒÖ≈ºenia. Mimo i≈º brakuje mu wielu zaawansowanych mo≈ºliwo≈õci
+Apache, jest niezwykle wydajny je≈õli chodzi o wykorzystywanie pamiƒôci.
+Dostarczane jest podstawowe wsparcie dla skrypt√≥w CGI,
 uwierzytelniania, oraz SSI.
 
 %package -n htpasswd-%{name}
 Summary:	thttpd htpasswd utility
-Summary(pl):	NarzÍdzie htpasswd z thttpd
+Summary(pl.UTF-8):   Narzƒôdzie htpasswd z thttpd
 Group:		Networking/Utilities
 Provides:	htpasswd
 Obsoletes:	htpasswd
@@ -86,11 +86,11 @@ usernames and password for basic authentication of HTTP users. This
 package contains htpasswd from thttpd; it supports only CRYPT
 encryption algorithm.
 
-%description -n htpasswd-%{name} -l pl
-htpasswd s≥uøy do tworzenia i uaktualniania p≥askich plikÛw s≥uø±cych
-do przechowywania nazw uøytkownikÛw i hase≥ do uwierzytelnienia basic
-uøytkownikÛw HTTP. Ten pakiet zawiera htpasswd z thttpd; ta wersja
-obs≥uguje wy≥±cznie has≥a zaszyfrowane przez CRYPT.
+%description -n htpasswd-%{name} -l pl.UTF-8
+htpasswd s≈Çu≈ºy do tworzenia i uaktualniania p≈Çaskich plik√≥w s≈Çu≈ºƒÖcych
+do przechowywania nazw u≈ºytkownik√≥w i hase≈Ç do uwierzytelnienia basic
+u≈ºytkownik√≥w HTTP. Ten pakiet zawiera htpasswd z thttpd; ta wersja
+obs≈Çuguje wy≈ÇƒÖcznie has≈Ça zaszyfrowane przez CRYPT.
 
 %prep
 %setup -q
