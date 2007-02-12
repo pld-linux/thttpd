@@ -5,7 +5,7 @@
 %define		php_version	4.0.6
 
 Summary:	Throttleable lightweight HTTP server
-Summary(pl.UTF-8):   Nieduży serwer HTTP do dużych obciążeń
+Summary(pl.UTF-8):	Nieduży serwer HTTP do dużych obciążeń
 Name:		thttpd
 Version:	2.25b
 Release:	8
@@ -75,7 +75,7 @@ uwierzytelniania, oraz SSI.
 
 %package -n htpasswd-%{name}
 Summary:	thttpd htpasswd utility
-Summary(pl.UTF-8):   Narzędzie htpasswd z thttpd
+Summary(pl.UTF-8):	Narzędzie htpasswd z thttpd
 Group:		Networking/Utilities
 Provides:	htpasswd
 Obsoletes:	htpasswd
