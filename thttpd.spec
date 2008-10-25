@@ -10,7 +10,7 @@ Name:		thttpd
 Version:	2.25b
 Release:	8
 License:	BSD
-Group:		Networking
+Group:		Networking/Daemons/HTTP
 Source0:	http://www.acme.com/software/thttpd/%{name}-%{version}.tar.gz
 # Source0-md5:	a0e9cd87455d3a0ea11e5ea7e947adf6
 Source1:	%{name}.init
