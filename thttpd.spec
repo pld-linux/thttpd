@@ -110,7 +110,7 @@ cd php-%{php_version}
 %patch -P9 -p1
 %patch -P10 -p1
 %patch -P11 -p1
-#%patch10 -p1
+#%%patch10 -p1
 cp -f %{SOURCE3} ../config.h
 %endif
 
