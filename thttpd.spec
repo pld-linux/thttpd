@@ -94,22 +94,22 @@ obsługuje wyłącznie hasła zaszyfrowane przez CRYPT.
 
 %prep
 %setup -q
-%patch0 -p1
+%patch -P0 -p1
 
 %if %{with php}
-%patch1 -p1
+%patch -P1 -p1
 tar xzf %{SOURCE4}
 cd php-%{php_version}
-%patch2 -p1
-%patch3 -p1
-%patch4 -p1
-%patch5 -p1
-%patch6 -p1
-%patch7 -p1
-%patch8 -p1
-%patch9 -p1
-%patch10 -p1
-%patch11 -p1
+%patch -P2 -p1
+%patch -P3 -p1
+%patch -P4 -p1
+%patch -P5 -p1
+%patch -P6 -p1
+%patch -P7 -p1
+%patch -P8 -p1
+%patch -P9 -p1
+%patch -P10 -p1
+%patch -P11 -p1
 #%patch10 -p1
 cp -f %{SOURCE3} ../config.h
 %endif
